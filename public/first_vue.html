@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>Snippet App</title>
+</head>
+<body>
+  <div id="app">
+    <p>{{message}}</p>
+    <p>{{message2}}</p>
+    <button @click="changeMessage">Change</button>
+    <ul>
+      <li v-for="list in lists">{{list.title}}</li>
+    </ul>
+    <button @click="listSnippet">ListSnippet</button>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data() {
+        return {
+          message: "hello vue",
+          message2: "hoge",
+          lists: [
+            {title: "title1"},
+            {title: "title2"}
+          ]
+        }
+      },
+      mounted() {
+        this.setMessage()
+      },
+      methods: {
+        setMessage() {
+          this.message = "Set Message"
+        },
+        changeMessage() {
+          let message2 = 
+          this.message = "Change Message"
+          axios.get("/snippets.json")
+          // es5
+          // .then(function(response) {
+          //   this.message2 = response.data[0]['title']
+          // }.bind(this))
+          // es6
+          .then(response => {
+            this.message2 = response.data[0]['title']
+          })
+        },
+        listSnippet() {
+          axios.get("/snippets.json")
+          .then(response => {
+            this.lists = response.data
+          })
+        }
+      }
+    })
+  </script>
+</body>
+</html>
