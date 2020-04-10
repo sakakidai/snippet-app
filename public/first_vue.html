@@ -16,6 +16,12 @@
       <li v-for="list in lists">{{list.title}}</li>
     </ul>
     <button @click="listSnippet">ListSnippet</button>
+    <div>
+      <input type="text" v-model="title" placeholder="title">
+      <input type="text" v-model="language" placeholder="language">
+      <input type="text" v-model="contents" placeholder="contents">
+    </div>
+    <button @click="postSnippet">postSnippet</button>
   </div>
 
   <script>
@@ -28,7 +34,10 @@
           lists: [
             {title: "title1"},
             {title: "title2"}
-          ]
+          ],
+          title: 'new title',
+          language: 'Ruby',
+          contents: 'contents'
         }
       },
       mounted() {
@@ -55,6 +64,12 @@
           axios.get("/snippets.json")
           .then(response => {
             this.lists = response.data
+          })
+        },
+        postSnippet() {
+          axios.post('/snippets.json', {title: this.title, language: this.language, contents: this.contents})
+          .then(response => {
+            this.listSnippet()
           })
         }
       }
